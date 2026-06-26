@@ -1,0 +1,77 @@
+openapi: 3.1.0
+info:
+  title: Fintech Reliability Lab API
+  version: 0.1.0
+  description: Public API contract for a fictional fintech reliability lab backend.
+servers:
+  - url: http://localhost:8080
+    description: Local development
+paths:
+  /api/v1/system/status:
+    get:
+      summary: Get application status metadata
+      operationId: getSystemStatus
+      tags:
+        - System
+      responses:
+        "200":
+          description: Application status metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemStatus"
+        "500":
+          $ref: "#/components/responses/Problem"
+components:
+  responses:
+    Problem:
+      description: RFC 9457 problem detail response
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+  schemas:
+    SystemStatus:
+      type: object
+      required:
+        - service
+        - status
+        - observedAt
+      properties:
+        service:
+          type: string
+          example: fintech-reliability-lab
+        status:
+          type: string
+          example: UP
+        observedAt:
+          type: string
+          format: date-time
+    Problem:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - code
+        - correlationId
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        code:
+          type: string
+        correlationId:
+          type: string
+        retryable:
+          type: boolean
